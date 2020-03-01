@@ -1,0 +1,20 @@
+# Installs prerequisites in Ubuntu with apt
+- name: Actualitza apt-get
+  apt:
+    update_cache: yes
+
+- name: install zabbix agent
+  apt: name=zabbix-agent state=installed
+
+- name: make file /opt/zabbix_psk_{{ ansible_hostname }}
+  copy:
+    dest: /opt/zabbix_psk_{{ ansible_hostname }}
+    content: |
+      {{ zabbixagent_hostpsk }}
+
+- name: be sure zabbix-agent is configured
+  template: src=zabbix_agentd.conf.j2 dest=/etc/zabbix/zabbix_agentd.conf
+
+- name: be sure zabbix-agent is running and enabled
+  service: name=zabbix-agent state=restarted enabled=yes
+

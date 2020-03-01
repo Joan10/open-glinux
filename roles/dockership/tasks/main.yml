@@ -1,0 +1,44 @@
+- name: apt-get update
+  command: apt-get -y update
+
+- name: Add an apt key by id from docker
+  command: /bin/bash -c 'curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -'
+
+- name: apt-get add docker repo
+  command: /bin/bash -c 'add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"'
+
+- name: apt-get update
+  command: apt-get -y update
+
+- name: be sure docker-ce is installed
+  apt: 
+    name: docker-ce
+    state: installed
+
+- name: be sure docker-compose is installed
+  apt:
+    name: docker-compose
+    state: installed
+
+- name: create docker folders
+  file:
+    path: /srv/docker
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: create docker folders
+  file:
+    path: /srv/docker-test
+    state: directory
+    mode: 0755
+    owner: root
+    group: root
+
+- name: Start service docker, if not started
+  service:
+    name: docker
+    state: started
+    enabled: yes
+

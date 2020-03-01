@@ -1,0 +1,33 @@
+- name: be sure ntpd is installed
+  apt: 
+    name: ntp
+    state: present
+  tags:
+    - ntp
+
+- name: Copy ntp config
+  copy:
+    src: ntp.conf
+    dest: /etc/ntp.conf
+    owner: root
+    group: root
+    mode: 0644
+  tags:
+    - ntp
+
+- name: Disable systemd ntp blob
+  systemd:
+    name: systemd-timesyncd
+    state: stopped
+    enabled: no
+  tags:
+    - ntp
+
+- name: Start service ntp, if not started
+  systemd:
+    name: ntp
+    state: started
+    enabled: yes
+  tags:
+    - ntp
+

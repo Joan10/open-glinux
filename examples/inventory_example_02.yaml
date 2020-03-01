@@ -1,0 +1,27 @@
+all:
+  hosts:
+    myhost.example.org:
+       ddclient_name: myhost.myorg.com
+       ddclient_server: qui.guifi.net
+
+       kvmhost_ipaddress: 10.0.2.3
+       kvmhost_netmask: 255.255.255.0
+       kvmhost_gateway: 10.0.2.1
+       kvmhost_dnsservers: 1.1.1.1
+       kvmhost_user: usukvm
+       kvmhost_main_iface: eno1
+
+       server_hostname: myhost
+       server_hostnamefqdn: myhost.myorg.com
+       server_ntpserver: ntp.ubuntu.com
+       server_sshconfig_contents: "Host mysshrepo.myorg.com
+	    Port 2222
+"
+       server_users:
+       -
+          name: joan
+          sudo: True
+          key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDV/TsZEBg4QVUOQPGQ5xO7XvMW8tcBpi9Ksa7qoAxXVvZG2XyzktzcObTqItEMWSBCoF3ikQYhj5YI7sA3IT5YP+knk+xLtIy2UP4Qo4vCfx82sPP/Onva4hvdfe7gbWr2TQM9Iy8W6G1zTMpB45huxo0S9gTLTKDdh6zMjDq1isHxGWLlol3QnVTygBSufdMXaT0koajLPjDtEmK79Uwx3Tfq+TSCwdUCXR+cE4BL8rUK8jWrijOf+po0RxXEsLyLTxKmEpKgSe2xijcOq95SBO1f64voGPw6h07S7aqK/ZMjhDTKUKcpskhOriJ+jqnBTmJnHnPtMFct6Q0H+FUd joan@myhost"
+
+       zabbixagent_hostpsk: 4786b52a17c75a037754cb6a1bfb9372596a83c3bff20d2f3e8e7c37456bd2fc
+       zabbixagent_zabbix_server: myzabbix.myorg.com

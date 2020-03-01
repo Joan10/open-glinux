@@ -1,0 +1,147 @@
+# Installs prerequisites in Ubuntu with apt
+- name: Actualitza apt-get
+  apt:
+    update_cache: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+
+- name: apt-get dist-upgrade
+  command: apt-get -y dist-upgrade
+
+- hostname:
+    name: "{{ server_hostname }}"
+
+- name: update hosts
+  template: src=hosts.j2 dest=/etc/hosts backup=yes owner=root group=root mode=0644
+   
+- name: be sure ntp is installed
+  apt: name=ntp state=installed
+
+- name: be sure ntp is configured
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  notify:
+    - restart ntp
+
+- name: be sure ntp is running and enabled
+  service: name=ntp state=started enabled=yes
+
+- name: be sure snmp mibs are installed
+  ignore_errors: yes
+  apt: 
+    name: snmp-mibs-downloader
+    state: installed
+
+- name: be sure mibs are activated
+  ignore_errors: yes
+  lineinfile:
+    path: /etc/snmp/snmp.conf
+    regexp: '^mibs(.*)'
+    line: 'mibs +ALL'
+
+- name: Copy mikrotik mib file with owner and permissions
+  copy:
+    src: mikrotik.mib
+    dest: /usr/share/snmp/mibs/
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Add local users
+  user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    append: yes
+  with_items:
+    - "{{ server_users | default([]) }}"
+
+- name: Add local users to groups
+  user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    groups: "{{ item.group | default([]) }}"
+    append: yes
+  with_items:
+    - "{{ server_users | default([]) }}"
+  when: item.group is defined
+
+
+- name: Add local users password
+  user:
+    name: "{{ item.name }}"
+    password: "{{ item.pass | default([]) }}"
+  with_items:
+    - "{{ server_secret_users_pass | default([]) }}"
+
+
+- name: Add local users to sudo
+  user:
+    name: "{{ item.name }}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+  with_items:
+    - "{{ server_users | default([]) }}"
+  when: item.sudo is defined
+
+- name: Deploy User SSH Key in authorized_keys
+  authorized_key:
+    user: "{{ item.name }}"
+    state: present
+    key: "{{ item.key }}"
+  with_items:
+    - "{{ server_users | default([]) }}"
+
+
+- name: be sure deps are installed
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - gnupg2 
+    - software-properties-common
+
+
+- name: be sure backup-rdiff is installed
+  apt:
+    name: rdiff-backup
+    state: installed
+
+
+- name: be sure git is installed
+  apt:
+    name: git
+    state: installed
+
+
+- name: copy ssh config
+  template:
+    src: ssh_config.j2
+    dest: /root/.ssh/config
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy ssh public key
+  ignore_errors: yes
+  copy:
+    src: id_rsa.pub
+    dest: /root/.ssh/id_rsa.pub
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy ssh private key
+  ignore_errors: yes
+  copy:
+    src: id_rsa
+    dest: /root/.ssh/id_rsa
+    owner: root
+    group: root
+    mode: 0600
+

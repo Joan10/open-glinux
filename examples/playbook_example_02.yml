@@ -1,0 +1,16 @@
+- hosts: myhost.example.org
+  gather_facts: true
+  become: true 
+  vars_files:
+    - "group_vars/secret.yml"
+  roles:
+    - server
+    - dockership
+    - ntpd
+    - kvmhost
+    - ddclient
+  post_tasks:
+    - shell: systemctl disable systemd-networkd-wait-online.service
+    - shell: systemctl stop systemd-networkd-wait-online.service
+    - shell: systemctl disable systemd-resolved.service
+    - shell: systemctl stop systemd-resolved.service

@@ -1,0 +1,10 @@
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix-agent/zabbix_agentd.log
+LogFileSize=0
+Server={{ zabbixagent_zabbix_server }}
+Hostname={{ inventory_hostname }}
+Include=/etc/zabbix/zabbix_agentd.conf.d/*.conf
+TLSConnect=psk
+TLSAccept=psk
+TLSPSKFile=/opt/zabbix_psk_{{ ansible_hostname }}
+TLSPSKIdentity=PSK_{{ ansible_hostname }}

@@ -1,0 +1,1 @@
+myhost.mydomain.org server_hostname="myhost" server_hostnamefqdn="myhost.mydomain.org" server_ntpserver="ntp.ubuntu.com" server_sshconfig_contents="Host repositori.gotes.org\n		Port 2200"

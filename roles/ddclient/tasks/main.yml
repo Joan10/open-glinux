@@ -1,0 +1,13 @@
+- name: be sure ddclient is installed
+  apt: 
+    name: ddclient
+    state: installed
+
+- name: Copy ddclient config
+  template:
+    src: ddclient.conf.j2
+    dest: /etc/ddclient.conf
+    owner: root
+    group: root
+    mode: 0644
+

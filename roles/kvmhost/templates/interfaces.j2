@@ -1,0 +1,27 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# The primary network interface
+iface {{ kvmhost_main_iface }} inet manual
+
+auto br-proves
+iface br-proves inet manual
+
+auto br-dmz
+iface br-dmz inet static
+        address {{ kvmhost_ipaddress }}
+        netmask {{ kvmhost_netmask }}
+        gateway {{ kvmhost_gateway }}
+        dns-nameservers {{ kvmhost_dnsservers }}
+        bridge_ports {{ kvmhost_main_iface }}
+        bridge_stp off
+        bridge_fd 0
+        bridge_maxwait 0
+        up iptables -I FORWARD -t filter -i br-dmz -j ACCEPT
+        up iptables -I FORWARD -t filter -o br-dmz -j ACCEPT
+
+
