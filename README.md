@@ -1,7 +1,7 @@
 Introducció
 ===========
 
-Playbook que configura una màquina virtual. Fa el següent:
+Playbook que configura una màquina. Fa el següent:
 
 * Apt-get update
 * Instal·la usuaris
