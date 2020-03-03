@@ -42,12 +42,12 @@ Variables:
 * `server_ntpserver` : servidor ntp. Ex. localhost.
 * `server_sshconfig_contents` : contingut de sshconfig de l'usuari root
 * `server_users`: llista d'estructures d'usuaris que es crearan al sistema. S'ha de definir:
- * `name`: nom de l'usuari
- * `sudo`: True o False si està al grup sudo
- * `key`: clau pública de l'usuari
+  * `name`: nom de l'usuari
+  * `sudo`: True o False si està al grup sudo
+  * `key`: clau pública de l'usuari
 * `server_secret_users_pass`: Secret. llista d'estructures d'usuaris amb el digest de la seva password. Es copia a l'/etc/shadow. S'ha de definir:
- * `name`: nom de l'usuari
- * `pass`: digest de l'usuari
+  * `name`: nom de l'usuari
+  * `pass`: digest de l'usuari
 
 Exemple de server_users:
 
