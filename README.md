@@ -102,7 +102,7 @@ Si hem de desplegar amb zabbix agent i variables secretes, introduim la PSK manu
 
 ```
 openssl rand -hex 32
-ansible-playbook -K --vault-id one@prompt -e host_psk=<key> -i inventory -l myserver glinux.yml
+ansible-playbook -K --vault-id one@prompt -e zabbixagent_hostpsk=<key> -i inventory -l myserver glinux.yml
 ```
 
 o bé si només volem instal·lar zabbix-agent
@@ -110,5 +110,5 @@ o bé si només volem instal·lar zabbix-agent
 
 ```
 openssl rand -hex 32
-ansible-playbook -K -e host_psk=<key> -i inventory zabbix-agent.yml 
+ansible-playbook -K -e zabbixagent_hostpsk=<key> -i inventory zabbix-agent.yml 
 ```
